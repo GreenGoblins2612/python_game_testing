@@ -8,17 +8,14 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+      - uses: actions/checkout@v4
 
       - name: Build APK
         uses: Digreatbrian/buildozer-action@v2
+        with:
+          buildozer-cmd: buildozer android debug
+        env:
+          ANDROID_ACCEPT_LICENSES: "y"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

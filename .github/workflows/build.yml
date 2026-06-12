@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -19,8 +19,6 @@ jobs:
 
       - name: Build APK
         uses: Digreatbrian/buildozer-action@v2
-        with:
-          buildozer_version: stable
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

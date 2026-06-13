@@ -1,35 +1,65 @@
-import pygame
+from kivy.app import App
+from kivy.clock import Clock
+from kivy.graphics import Color, Ellipse, Rectangle
+from kivy.uix.widget import Widget
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((500, 500))
-clock = pygame.time.Clock()
-running = True
-pos = [250, 250]
-dt = 0
-vel = 0
-gravity = 0.3
-bounce = 0
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-    screen.fill("#ADD8E6")
-    pygame.draw.circle(screen, "orange", pos, 30)
-    pygame.draw.circle(screen, "yellow", (400,65), 50)
-    pygame.draw.rect(screen, "#7CFC00", (0, 480, 500, 20))
-    
-    vel += gravity
-    pos[1] += vel
+class Game(Widget):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-    if pos[1] >= 450:
-        pos[1] = 450
-        vel = -8 + bounce
-        bounce += 1
+        self.ball_y = 0
+        self.vel = 0
+        self.gravity = 0.3
 
-    pygame.display.flip()
+        with self.canvas:
+            Color(0.68, 0.85, 0.90)
+            self.bg = Rectangle()
 
-    dt = clock.tick(60) / 1000
+            Color(1, 1, 0)
+            self.sun = Ellipse(size=(100, 100))
 
-pygame.quit()
+            Color(1, 0.65, 0)
+            self.ball = Ellipse(size=(60, 60))
+
+            Color(0.49, 0.99, 0)
+            self.ground = Rectangle()
+
+        self.bind(size=self.update_layout)
+        self.bind(pos=self.update_layout)
+
+        Clock.schedule_once(self.start_game)
+        Clock.schedule_interval(self.update, 1 / 60)
+
+    def start_game(self, dt):
+        self.ball_y = self.height / 2
+
+    def update_layout(self, *args):
+        self.bg.pos = self.pos
+        self.bg.size = self.size
+
+        self.sun.pos = (self.width - 120, self.height - 120)
+
+        self.ground.pos = (0, 0)
+        self.ground.size = (self.width, 20)
+
+    def update(self, dt):
+        self.vel += self.gravity
+        self.ball_y -= self.vel
+
+        if self.ball_y <= 20:
+            self.ball_y = 20
+            self.vel *= -0.8
+
+            if abs(self.vel) < 1:
+                self.vel = 0
+
+        self.ball.pos = (self.width / 2 - 30, self.ball_y)
+
+
+class MyApp(App):
+    def build(self):
+        return Game()
+
+
+MyApp().run()

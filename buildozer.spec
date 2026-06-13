@@ -9,7 +9,7 @@ version = 0.1
 source.dir = .
 source.include_exts = py,png,jpg,wav,mp3
 
-requirements = python3,pygame-ce
+requirements = python3,kivy
 
 orientation = portrait
 

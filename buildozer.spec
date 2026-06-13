@@ -13,7 +13,7 @@ requirements = python3,pygame-ce
 
 orientation = portrait
 
-fullscreen = 0
+fullscreen = 1
 
 android.api = 35
 android.minapi = 21
